@@ -1,0 +1,35 @@
+cff-version: 1.2.0
+message: "Si usas esta actividad, por favor cítala con los siguientes datos."
+title: "Cofunciones en el triángulo 30°-60°-90°: actividad interactiva sobre cofunciones y la tabla de razones trigonométricas de 0° a 360°"
+type: software
+version: "1.0"
+date-released: "2026-10-28"
+license: CC-BY-NC-SA-4.0
+url: "https://daliacastillo.github.io/cofunciones-30-60-90/"
+repository-code: "https://github.com/daliacastillo/cofunciones-30-60-90"
+authors:
+  - family-names: "Castillo Márquez"
+    given-names: "Dalia Imelda"
+    orcid: "https://orcid.org/0000-0002-5890-0437"
+    affiliation: "Universidad Autónoma de Nayarit, Unidad Académica de Ciencias Básicas e Ingenierías"
+abstract: >-
+  Actividad interactiva para estudiar las cofunciones a partir del triángulo
+  30°-60°-90°. El estudiante elige un ángulo y una razón trigonométrica, y la
+  figura resalta el lado del numerador y el del denominador; al mirar desde el
+  ángulo complementario se comprueba que la fracción es la misma y solo cambia
+  el nombre de la razón. Incluye la tabla de las seis razones de 0° a 360° en
+  pasos de 30°, la explicación del ángulo de referencia y del signo por
+  cuadrante, y un modo de práctica con retroalimentación inmediata.
+keywords:
+  - trigonometría
+  - cofunciones
+  - triángulo 30-60-90
+  - ángulos notables
+  - razones trigonométricas
+  - ángulo de referencia
+  - signos por cuadrante
+  - círculo unitario
+  - material didáctico interactivo
+  - recurso educativo abierto
+  - enseñanza de las matemáticas
+  - educación superior

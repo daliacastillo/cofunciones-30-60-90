@@ -1,0 +1,546 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="author" content="Dalia Imelda Castillo Márquez">
+<meta name="description" content="Actividad interactiva sobre cofunciones en el triángulo 30°-60°-90° y la tabla de las seis razones trigonométricas de 0° a 360°.">
+<title>Cofunciones en el triángulo 30°-60°-90°</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Domine:wght@500;700&family=Nunito+Sans:wght@400;600;700;800&display=swap">
+<style>
+/* Diseño: papel cuadriculado de trazo técnico; figura a la izquierda, tabla a la derecha, una columna en teléfono */
+:root{
+  --paper:#F3F6F4; --surface:#FCFDFC; --ink:#17233A; --muted:#566176; --line:#D3DAE2; --grid:#E2E8E5;
+  --num:#B8460E; --num-soft:#FBE9DC; --den:#1F5BC4; --den-soft:#E1EAF9;
+  --ok:#17723A; --ok-soft:#E1F3E6; --bad:#B42318; --bad-soft:#FBE4E1; --axis:#EEF1EC;
+  --f-display:'Domine', Georgia, serif; --f-body:'Nunito Sans', 'Segoe UI', Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#10151D; --surface:#171E29; --ink:#E7ECF3; --muted:#A2ACBC; --line:#2C3746; --grid:#1C2532;
+  --num:#F49A5C; --num-soft:#3A2618; --den:#86AEF5; --den-soft:#1B2A45;
+  --ok:#5BD58A; --ok-soft:#173222; --bad:#F7867B; --bad-soft:#3A1C1A; --axis:#1D2530; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#10151D; --surface:#171E29; --ink:#E7ECF3; --muted:#A2ACBC; --line:#2C3746; --grid:#1C2532;
+  --num:#F49A5C; --num-soft:#3A2618; --den:#86AEF5; --den-soft:#1B2A45;
+  --ok:#5BD58A; --ok-soft:#173222; --bad:#F7867B; --bad-soft:#3A1C1A; --axis:#1D2530; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.5}
+.wrap{max-width:1280px;margin:0 auto;padding-block:28px 48px;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));display:flex;flex-direction:column;gap:24px}
+header{display:flex;flex-direction:column;gap:10px}
+h1{font-family:var(--f-display);font-weight:700;font-size:clamp(1.6rem,3.2vw,2.4rem);line-height:1.15;margin:0;text-wrap:balance}
+.autora{color:var(--muted);margin:0;font-weight:600}
+.indic{margin:4px 0 0;padding-left:1.3em;color:var(--ink);max-width:75ch;display:flex;flex-direction:column;gap:2px}
+h2{font-family:var(--f-display);font-weight:700;font-size:1.25rem;margin:0}
+.kicker{font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;font-weight:800;color:var(--muted);margin:0}
+
+.grid{display:grid;grid-template-columns:minmax(0,440px) minmax(0,1fr);gap:24px;align-items:start}
+@media (max-width:980px){.grid{grid-template-columns:minmax(0,1fr)}}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:16px;min-width:0}
+
+.ctl{display:flex;flex-direction:column;gap:8px}
+.ctl-label{font-size:.8rem;font-weight:700;color:var(--muted)}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg button,.btn{font:inherit;font-weight:700;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);border-radius:8px;padding:6px 12px;cursor:pointer;min-height:36px}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.btn:hover,.seg button:hover{border-color:var(--ink)}
+.btn.primary{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+button:focus-visible{outline:3px solid var(--den);outline-offset:2px}
+
+.fig{border-radius:10px;border:1px solid var(--line);background-color:var(--surface);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:19px 19px}
+.fig svg{display:block;width:100%;height:auto}
+.side{stroke-linecap:round;transition:stroke-width .25s, opacity .25s}
+.side.off{stroke:var(--ink);stroke-width:3;opacity:.35}
+.side.num{stroke:var(--num);stroke-width:9}
+.side.den{stroke:var(--den);stroke-width:9;stroke-dasharray:16 9}
+.lbl{font-family:var(--f-body);font-size:17px;font-weight:800;fill:var(--ink)}
+.lbl .role{font-weight:600;font-size:14px;fill:var(--muted)}
+.lbl.num{fill:var(--num)} .lbl.den{fill:var(--den)}
+.lbl.num .role{fill:var(--num)} .lbl.den .role{fill:var(--den)}
+.ang{cursor:pointer}
+.ang path{fill:none;stroke:var(--muted);stroke-width:2.5}
+.ang text{font-family:var(--f-body);font-weight:800;font-size:17px;fill:var(--muted)}
+.ang.on path{stroke:var(--ink);stroke-width:4}
+.ang.on text{fill:var(--ink)}
+.recto{fill:none;stroke:var(--ink);stroke-width:2.5;opacity:.7}
+
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:.85rem;color:var(--muted);font-weight:600}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:28px;height:0;border-top:5px solid var(--num);display:inline-block}
+.sw.d{border-top:5px dashed var(--den)}
+
+.calc{background:var(--paper);border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;font-size:1.15rem}
+.calc .eq{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.t-num{color:var(--num);font-weight:800} .t-den{color:var(--den);font-weight:800}
+.cof{border-left:4px solid var(--ink);padding:4px 0 4px 14px;display:flex;flex-direction:column;gap:8px}
+.cof p{margin:0}
+.cof .big{font-family:var(--f-display);font-size:1.2rem}
+
+.frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;line-height:1.15;font-size:.92em;margin:0 .1em}
+.frac>span:first-child{border-bottom:1.5px solid currentColor;padding:0 .25em}
+.ov{border-top:1.5px solid currentColor;padding-left:.05em}
+.nd{font-size:.82em;font-weight:700;color:var(--muted)}
+
+.tbl-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:12px}
+.modes{display:flex;flex-wrap:wrap;gap:8px}
+.tbl-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;min-width:640px;font-variant-numeric:tabular-nums}
+th,td{border-bottom:1px solid var(--line);padding:0;text-align:center}
+thead th{font-family:var(--f-display);font-size:1rem;padding:10px 6px;background:var(--paper);position:sticky;top:0}
+tbody th{padding:6px 10px;text-align:left;white-space:nowrap;font-weight:800}
+.q{display:inline-block;margin-left:6px;font-size:.7rem;font-weight:800;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:0 7px;vertical-align:middle}
+tr.eje{background:var(--axis)}
+tr.tri th{color:var(--num)}
+.cell{font:inherit;font-size:1rem;width:100%;min-height:46px;border:0;background:transparent;color:var(--ink);cursor:pointer;padding:4px 6px;border-radius:6px}
+.cell:hover{background:var(--den-soft)}
+.cell.link{background:var(--num-soft);box-shadow:inset 0 0 0 2px var(--num)}
+.cell.cur{box-shadow:inset 0 0 0 2px var(--ink)}
+.cell.hid{color:var(--muted);font-weight:800;background:repeating-linear-gradient(135deg,transparent 0 6px,var(--grid) 6px 8px)}
+.cell.sel{box-shadow:inset 0 0 0 3px var(--den);background:var(--den-soft);color:var(--den)}
+.cell.solved{background:var(--ok-soft);color:var(--ok);font-weight:700}
+.cell.shake{animation:sh .35s}
+@keyframes sh{20%{transform:translateX(-4px)}40%{transform:translateX(4px)}60%{transform:translateX(-3px)}80%{transform:translateX(3px)}}
+@media (prefers-reduced-motion:reduce){.cell.shake{animation:none}.side{transition:none}}
+
+.pal{display:flex;flex-direction:column;gap:8px;background:var(--paper);border-radius:10px;padding:12px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font:inherit;font-size:1rem;min-width:56px;min-height:44px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;cursor:pointer;padding:2px 8px}
+.chip:hover:not(:disabled){border-color:var(--den)}
+.chip:disabled{opacity:.45;cursor:default}
+.score{font-weight:700;color:var(--muted);margin:0}
+
+.detail{border-radius:10px;padding:14px 16px;background:var(--paper);min-height:72px;display:flex;flex-direction:column;gap:6px}
+.detail p{margin:0;max-width:80ch}
+.detail.ok{background:var(--ok-soft)} .detail.bad{background:var(--bad-soft)}
+.detail .tag{font-size:.75rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
+.detail.ok .tag{color:var(--ok)} .detail.bad .tag{color:var(--bad)}
+.signs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;font-size:.85rem}
+.signs div{border:1px solid var(--line);border-radius:8px;padding:6px 10px;background:var(--surface)}
+.signs b{font-family:var(--f-display)}
+.nota{border:1.5px solid var(--ink);border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:14px;background:var(--surface)}
+.nota h3{font-family:var(--f-display);font-size:1.1rem;margin:0}
+.nota p{margin:0;max-width:80ch}
+.nota-row{display:grid;grid-template-columns:minmax(0,260px) minmax(0,1fr);gap:18px;align-items:center}
+@media (max-width:640px){.nota-row{grid-template-columns:minmax(0,1fr)}}
+.circ{width:100%;max-width:260px;height:auto;display:block;margin:0 auto}
+.circ .ax{stroke:var(--muted);stroke-width:1.2}
+.circ .cir{fill:none;stroke:var(--line);stroke-width:1.5}
+.circ .t1{fill:var(--num-soft);stroke:var(--num);stroke-width:2.2}
+.circ .tn{fill:var(--den-soft);stroke:var(--den);stroke-width:2;stroke-dasharray:5 4}
+.circ text{font-family:var(--f-body);font-size:13px;font-weight:800;fill:var(--ink)}
+.circ .sm{font-size:11px;font-weight:700;fill:var(--muted)}
+.pasos{margin:0;padding-left:1.3em;display:flex;flex-direction:column;gap:4px}
+.reglas{width:100%;min-width:0;border-collapse:collapse;font-size:.92rem}
+.reglas th,.reglas td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left}
+.reglas th{font-family:var(--f-display);font-size:.9rem;background:var(--paper)}
+.ejemplo{background:var(--paper);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:4px}
+.creditos{border-top:2px solid var(--ink);padding-top:22px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:28px;font-size:.95rem}
+@media (max-width:860px){.creditos{grid-template-columns:minmax(0,1fr)}}
+.creditos h2{font-size:1.05rem}
+.creditos p{margin:0}
+.creditos a{color:var(--den);font-weight:700}
+.cred-col{display:flex;flex-direction:column;gap:12px;min-width:0}
+.dl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 14px}
+.dl dt{font-weight:800;color:var(--muted)}
+.dl dd{margin:0;overflow-wrap:anywhere}
+.cita{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.cita-h{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.cita-h b{font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.cita p,.cita pre{margin:0;overflow-wrap:anywhere}
+.cita pre{font-family:ui-monospace,'Cascadia Mono',Consolas,monospace;font-size:.82rem;white-space:pre-wrap;line-height:1.45}
+.copy{font:inherit;font-size:.8rem;font-weight:700;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);border-radius:6px;padding:3px 10px;cursor:pointer;min-height:30px}
+.copy:hover{border-color:var(--ink)}
+</style>
+</head>
+<body style="margin:0">
+
+<div class="wrap">
+  <header>
+    <h1>Cofunciones en el triángulo 30°-60°-90°</h1>
+    <p class="autora">Dra. Dalia Imelda Castillo Márquez</p>
+    <ol class="indic">
+      <li>Elige un ángulo (30° o 60°) y una razón. Observa qué lado va arriba de la fracción y cuál va abajo.</li>
+      <li>Pulsa «Mirar desde el ángulo complementario»: los lados resaltados no cambian, solo cambia el nombre de la razón.</li>
+      <li>En la tabla, toca cualquier celda para ver de dónde sale su valor.</li>
+      <li>Usa «Practicar» para ocultar celdas y completarlas tú.</li>
+    </ol>
+  </header>
+
+  <div class="grid">
+    <section class="panel" aria-labelledby="t-tri">
+      <p class="kicker">El triángulo</p>
+      <h2 id="t-tri">Lados 1 : √3 : 2</h2>
+
+      <div class="ctl">
+        <span class="ctl-label" id="l-ang">Ángulo</span>
+        <div class="seg" role="group" aria-labelledby="l-ang" id="seg-ang"></div>
+      </div>
+      <div class="ctl">
+        <span class="ctl-label" id="l-fn">Razón trigonométrica</span>
+        <div class="seg" role="group" aria-labelledby="l-fn" id="seg-fn"></div>
+      </div>
+
+      <div class="fig">
+        <svg viewBox="0 0 480 340" role="img" aria-labelledby="fig-desc">
+          <title id="fig-desc">Triángulo rectángulo con ángulos de 30, 60 y 90 grados. Cateto vertical 1, cateto horizontal raíz de 3, hipotenusa 2.</title>
+          <line id="s-v" class="side off" x1="70" y1="90" x2="70" y2="280"/>
+          <line id="s-h" class="side off" x1="70" y1="280" x2="399" y2="280"/>
+          <line id="s-hyp" class="side off" x1="70" y1="90" x2="399" y2="280"/>
+          <path class="recto" d="M70 258 H92 V280"/>
+          <g class="ang" id="a30" tabindex="-1"><path d="M349 280 A50 50 0 0 1 355.7 255"/><text x="300" y="268">30°</text></g>
+          <g class="ang" id="a60" tabindex="-1"><path d="M104.6 110 A40 40 0 0 1 70 130"/><text x="80" y="158">60°</text></g>
+          <text x="98" y="276" class="lbl" style="font-size:14px;font-weight:700;fill:var(--muted)">90°</text>
+          <text id="lb-v" class="lbl" x="58" y="180" text-anchor="end"><tspan class="len" x="58" dy="0">1</tspan><tspan class="role" x="58" dy="20"></tspan></text>
+          <text id="lb-h" class="lbl" x="234" y="306" text-anchor="middle"><tspan class="len" x="234" dy="0">√3</tspan><tspan class="role" x="234" dy="20"></tspan></text>
+          <text id="lb-hyp" class="lbl" x="268" y="160" text-anchor="start"><tspan class="len" x="268" dy="0">2</tspan><tspan class="role" x="268" dy="20"></tspan></text>
+        </svg>
+      </div>
+      <div class="legend" aria-hidden="true">
+        <span><i class="sw"></i>Línea continua: lado del numerador</span>
+        <span><i class="sw d"></i>Línea punteada: lado del denominador</span>
+      </div>
+
+      <div class="calc" id="calc" aria-live="polite"></div>
+      <div class="cof" id="cof"></div>
+    </section>
+
+    <section class="panel" aria-labelledby="t-tab">
+      <div class="tbl-head">
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <p class="kicker">La tabla</p>
+          <h2 id="t-tab">Seis razones, de 30° en 30°</h2>
+        </div>
+        <div class="modes">
+          <button class="btn primary" id="b-ver" type="button">Ver tabla completa</button>
+          <button class="btn" id="b-p12" type="button">Practicar 12 celdas</button>
+          <button class="btn" id="b-pall" type="button">Practicar toda la tabla</button>
+        </div>
+      </div>
+
+      <div class="pal" id="pal" hidden>
+        <p class="score" id="score"></p>
+        <span class="ctl-label">Toca una celda con «?» y después elige su valor:</span>
+        <div class="chips" id="chips"></div>
+      </div>
+
+      <div class="tbl-scroll">
+        <table>
+          <thead><tr><th scope="col">θ</th><th scope="col">sen</th><th scope="col">cos</th><th scope="col">tan</th><th scope="col">cot</th><th scope="col">sec</th><th scope="col">csc</th></tr></thead>
+          <tbody id="tb"></tbody>
+        </table>
+      </div>
+
+      <div class="detail" id="detail" aria-live="polite"></div>
+
+      <aside class="nota" aria-labelledby="t-nota">
+        <p class="kicker">Nota</p>
+        <h3 id="t-nota">¿Y los ángulos que no están en el triángulo, como 120°, 150° o 210°?</h3>
+        <p>El triángulo solo tiene ángulos agudos, así que 120°, 150°, 210°, 240°, 300° y 330° no aparecen en él. Pero no hace falta otro triángulo: <b>es el mismo triángulo 1 : √3 : 2 colocado en otro cuadrante</b>. Al moverlo, las medidas de sus lados no cambian; lo único que cambia es la dirección de los catetos, y eso se refleja en el signo.</p>
+        <div class="nota-row">
+          <svg class="circ" viewBox="0 0 300 300" role="img" aria-labelledby="circ-t">
+            <title id="circ-t">El triángulo de 30 grados copiado en los cuatro cuadrantes, para 30, 150, 210 y 330 grados. Todos tienen un ángulo de 30 grados con el eje x.</title>
+            <circle class="cir" cx="150" cy="150" r="110"/>
+            <line class="ax" x1="20" y1="150" x2="280" y2="150"/>
+            <line class="ax" x1="150" y1="20" x2="150" y2="280"/>
+            <path class="t1" d="M150 150 L245.3 150 L245.3 95 Z"/>
+            <path class="tn" d="M150 150 L54.7 150 L54.7 95 Z"/>
+            <path class="tn" d="M150 150 L54.7 150 L54.7 205 Z"/>
+            <path class="tn" d="M150 150 L245.3 150 L245.3 205 Z"/>
+            <text x="250" y="88">30°</text>
+            <text x="16" y="88">150°</text>
+            <text x="16" y="224">210°</text>
+            <text x="250" y="224">330°</text>
+            <text class="sm" x="258" y="40">I</text>
+            <text class="sm" x="34" y="40">II</text>
+            <text class="sm" x="30" y="270">III</text>
+            <text class="sm" x="254" y="270">IV</text>
+          </svg>
+          <div style="display:flex;flex-direction:column;gap:10px;min-width:0">
+            <p><b>Procedimiento</b> para un ángulo θ que no es del triángulo:</p>
+            <ol class="pasos">
+              <li>Ubica el cuadrante donde cae θ.</li>
+              <li>Calcula su <b>ángulo de referencia</b>: el ángulo agudo entre el lado terminal y el eje x. Siempre sale 30° o 60°.</li>
+              <li>Toma el valor de ese ángulo en el triángulo.</li>
+              <li>Ponle el signo del cuadrante.</li>
+            </ol>
+          </div>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="reglas">
+            <tr><th>Cuadrante</th><th>Ángulo de referencia</th><th>Ángulos de la tabla</th></tr>
+            <tr><td>II (90° a 180°)</td><td>180° − θ</td><td>120° → 60° · 150° → 30°</td></tr>
+            <tr><td>III (180° a 270°)</td><td>θ − 180°</td><td>210° → 30° · 240° → 60°</td></tr>
+            <tr><td>IV (270° a 360°)</td><td>360° − θ</td><td>300° → 60° · 330° → 30°</td></tr>
+          </table>
+        </div>
+        <div class="ejemplo">
+          <p><b>Ejemplo: cos 150°</b></p>
+          <p>150° está en el cuadrante II. Referencia: 180° − 150° = 30°. En el triángulo, cos 30° = √3/2. En el cuadrante II el coseno es negativo, porque el cateto horizontal apunta hacia la izquierda (x &lt; 0). Entonces cos 150° = −√3/2.</p>
+        </div>
+        <p style="color:var(--muted)"><b>Los ángulos 0°, 90°, 180°, 270° y 360°</b> tampoco salen del triángulo: en ellos el triángulo se «aplana» sobre un eje. Sus valores se leen del punto (x, y) del círculo unitario, y cuando un denominador vale 0 la razón no está definida.</p>
+      </aside>
+
+      <div class="ctl">
+        <span class="ctl-label">Signo de cada razón según el cuadrante</span>
+        <div class="signs">
+          <div><b>II</b> · positivas: sen y csc</div>
+          <div><b>I</b> · positivas: todas</div>
+          <div><b>III</b> · positivas: tan y cot</div>
+          <div><b>IV</b> · positivas: cos y sec</div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <footer class="creditos" aria-labelledby="t-cred">
+    <div class="cred-col">
+      <h2 id="t-cred">Autoría y licencia</h2>
+      <dl class="dl">
+        <dt>Autora</dt><dd>Dra. Dalia Imelda Castillo Márquez</dd>
+        <dt>ORCID</dt><dd><a href="https://orcid.org/0000-0002-5890-0437" rel="noopener">0000-0002-5890-0437</a></dd>
+        <dt>Versión</dt><dd>1.0 · 2026</dd>
+        <dt>Licencia</dt><dd><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es" rel="license noopener">CC BY-NC-SA 4.0</a></dd>
+      </dl>
+      <p style="color:var(--muted)">Puedes usar, compartir y adaptar esta actividad sin fines comerciales, siempre que cites a la autora y compartas tus adaptaciones con la misma licencia.</p>
+    </div>
+    <div class="cred-col">
+      <h2>Cómo citar</h2>
+      <div class="cita">
+        <div class="cita-h"><b>APA 7</b><button class="copy" type="button" data-copy="cita-apa">Copiar</button></div>
+        <p id="cita-apa">Castillo Márquez, D. I. (2026). <i>Cofunciones en el triángulo 30°-60°-90°: actividad interactiva sobre cofunciones y la tabla de razones trigonométricas de 0° a 360°</i> (Versión 1.0) [Material didáctico interactivo]. https://daliacastillo.github.io/cofunciones-30-60-90/</p>
+      </div>
+      <div class="cita">
+        <div class="cita-h"><b>BibTeX</b><button class="copy" type="button" data-copy="cita-bib">Copiar</button></div>
+<pre id="cita-bib">@misc{castillo2026cofunciones,
+  author       = {Castillo Márquez, Dalia Imelda},
+  title        = {Cofunciones en el triángulo 30°-60°-90°: actividad interactiva sobre cofunciones y la tabla de razones trigonométricas de 0° a 360°},
+  year         = {2026},
+  version      = {1.0},
+  howpublished = {Material didáctico interactivo},
+  url          = {https://daliacastillo.github.io/cofunciones-30-60-90/},
+  note         = {Licencia CC BY-NC-SA 4.0}
+}</pre>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script>
+document.querySelectorAll('.copy').forEach(function(b){
+  b.addEventListener('click',function(){
+    var el=document.getElementById(b.dataset.copy), t=el.innerText.trim();
+    var done=function(){b.textContent='Copiado';setTimeout(function(){b.textContent='Copiar';},1600);};
+    var sel=function(){var r=document.createRange();r.selectNodeContents(el);var s=window.getSelection();s.removeAllRanges();s.addRange(r);b.textContent='Seleccionado: usa Ctrl+C';setTimeout(function(){b.textContent='Copiar';},2400);};
+    try{navigator.clipboard.writeText(t).then(done,sel);}catch(e){sel();}
+  });
+});
+</script>
+
+<script>
+(function(){
+const K=[0,30,60,90,120,150,180,210,240,270,300,330,360];
+const F=['sen','cos','tan','cot','sec','csc'];
+const ND='nd';
+const V={
+ sen:['0','1/2','√3/2','1','√3/2','1/2','0','−1/2','−√3/2','−1','−√3/2','−1/2','0'],
+ cos:['1','√3/2','1/2','0','−1/2','−√3/2','−1','−√3/2','−1/2','0','1/2','√3/2','1'],
+ tan:['0','√3/3','√3',ND,'−√3','−√3/3','0','√3/3','√3',ND,'−√3','−√3/3','0'],
+ cot:[ND,'√3','√3/3','0','−√3/3','−√3',ND,'√3','√3/3','0','−√3/3','−√3',ND],
+ sec:['1','2√3/3','2',ND,'−2','−2√3/3','−1','−2√3/3','−2',ND,'2','2√3/3','1'],
+ csc:[ND,'2','2√3/3','1','2√3/3','2',ND,'−2','−2√3/3','−1','−2√3/3','−2',ND]
+};
+const COF={sen:'cos',cos:'sen',tan:'cot',cot:'tan',sec:'csc',csc:'sec'};
+const RATIO={sen:['op','hip'],cos:['ad','hip'],tan:['op','ad'],cot:['ad','op'],sec:['hip','ad'],csc:['hip','op']};
+const NAME={op:'opuesto',ad:'adyacente',hip:'hipotenusa'};
+const LEN={v:'1',h:'√3',hyp:'2'};
+const PAL=['0','1/2','−1/2','√3/2','−√3/2','√3/3','−√3/3','√3','−√3','2√3/3','−2√3/3','1','−1','2','−2',ND];
+const POS={1:F,2:['sen','csc'],3:['tan','cot'],4:['cos','sec']};
+const ROM={1:'I',2:'II',3:'III',4:'IV'};
+const PT={0:['1','0'],90:['0','1'],180:['−1','0'],270:['0','−1'],360:['1','0']};
+
+const st={ang:30,fn:'sen',mode:'ver',hidden:new Set(),solved:new Set(),sel:null,ok:0,tries:0,cur:null};
+const $=id=>document.getElementById(id);
+const key=(k,f)=>k+'|'+f;
+const val=(k,f)=>V[f][K.indexOf(k)];
+
+function rad(x){return x.replace('√3','√<span class="ov">3</span>');}
+function fmt(s){
+  if(s===ND) return '<span class="nd">no def.</span>';
+  const neg=s.startsWith('−'); const b=neg?s.slice(1):s; const p=b.split('/');
+  const body=p.length>1?'<span class="frac"><span>'+rad(p[0])+'</span><span>'+rad(p[1])+'</span></span>':rad(p[0]);
+  return (neg?'−':'')+body;
+}
+function fracHTML(n,d,cn,cd){return '<span class="frac"><span class="'+cn+'">'+n+'</span><span class="'+cd+'">'+d+'</span></span>';}
+function sideOf(role,ang){ if(role==='hip')return 'hyp'; if(ang===30) return role==='op'?'v':'h'; return role==='op'?'h':'v'; }
+function roleOf(side,ang){ if(side==='hyp')return 'hipotenusa'; if(side==='v') return ang===30?'opuesto':'adyacente'; return ang===30?'adyacente':'opuesto'; }
+function quad(k){ return k%90===0?0:Math.floor(k/90)+1; }
+function ref(k){ const q=quad(k); return q===1?k:q===2?180-k:q===3?k-180:360-k; }
+
+/* ---------- controles ---------- */
+function buildSeg(){
+  const a=$('seg-ang'), f=$('seg-fn');
+  [30,60].forEach(x=>{const b=document.createElement('button');b.type='button';b.id='ba'+x;b.textContent=x+'°';b.onclick=()=>{st.ang=x;renderTri();};a.appendChild(b);});
+  F.forEach(x=>{const b=document.createElement('button');b.type='button';b.id='bf'+x;b.textContent=x;b.onclick=()=>{st.fn=x;renderTri();};f.appendChild(b);});
+  $('a30').addEventListener('click',()=>{st.ang=30;renderTri();});
+  $('a60').addEventListener('click',()=>{st.ang=60;renderTri();});
+}
+
+/* ---------- triángulo ---------- */
+function renderTri(){
+  const {ang,fn}=st, [rn,rd]=RATIO[fn];
+  const sn=sideOf(rn,ang), sd=sideOf(rd,ang);
+  ['v','h','hyp'].forEach(s=>{
+    const cls=s===sn?'num':s===sd?'den':'off';
+    $('s-'+s).setAttribute('class','side '+cls);
+    const lb=$('lb-'+s); lb.setAttribute('class','lbl'+(cls==='off'?'':' '+cls));
+    lb.querySelector('.role').textContent=roleOf(s,ang);
+  });
+  $('a30').setAttribute('class','ang'+(ang===30?' on':''));
+  $('a60').setAttribute('class','ang'+(ang===60?' on':''));
+  [30,60].forEach(x=>$('ba'+x).setAttribute('aria-pressed',x===ang));
+  F.forEach(x=>$('bf'+x).setAttribute('aria-pressed',x===fn));
+
+  const n=LEN[sn], d=LEN[sd], v=val(ang,fn);
+  const raw=d==='1'?n:n+'/'+d;
+  let h='<div class="eq"><b>'+fn+' '+ang+'°</b> = '+fracHTML(NAME[rn],NAME[rd],'t-num','t-den')+' = '+fracHTML(rad(n),rad(d),'t-num','t-den');
+  if(raw!==v) h+=' = '+fmt(v);
+  h+='</div>';
+  if(d==='√3') h+='<span style="font-size:.85rem;color:var(--muted)">Se racionaliza: se multiplica arriba y abajo por √3.</span>';
+  else if(d==='1') h+='<span style="font-size:.85rem;color:var(--muted)">Dividir entre 1 deja el mismo número.</span>';
+  $('calc').innerHTML=h;
+
+  const co=COF[fn], ca=90-ang;
+  $('cof').innerHTML='<p class="kicker">Cofunción</p>'+
+    '<p class="big">'+fn+' '+ang+'° = '+co+' '+ca+'° = '+fmt(v)+'</p>'+
+    '<p style="color:var(--muted)">Desde '+ca+'° el lado '+LEN[sn]+' es el <b>'+roleOf(sn,ca)+'</b> y el lado '+LEN[sd]+' es el <b>'+roleOf(sd,ca)+'</b>. La fracción es la misma; cambia el nombre de la razón porque '+ang+'° + '+ca+'° = 90°.</p>'+
+    '<div><button class="btn" type="button" id="b-cof">Mirar desde el ángulo complementario ('+ca+'°)</button></div>';
+  $('b-cof').onclick=()=>{st.ang=ca;st.fn=co;renderTri();};
+  renderTable();
+}
+
+/* ---------- tabla ---------- */
+function buildTable(){
+  const tb=$('tb');
+  K.forEach(k=>{
+    const tr=document.createElement('tr'); const q=quad(k);
+    if(q===0) tr.className='eje'; if(k===30||k===60) tr.className='tri';
+    const th=document.createElement('th'); th.scope='row';
+    th.innerHTML=k+'°<span class="q">'+(q===0?'eje':ROM[q])+'</span>';
+    tr.appendChild(th);
+    F.forEach(f=>{
+      const td=document.createElement('td'); const b=document.createElement('button');
+      b.type='button'; b.className='cell'; b.dataset.k=k; b.dataset.f=f; b.id='c'+k+f;
+      b.onclick=()=>clickCell(k,f); td.appendChild(b); tr.appendChild(td);
+    });
+    tb.appendChild(tr);
+  });
+}
+function renderTable(){
+  const L1=key(st.ang,st.fn), L2=key(90-st.ang,COF[st.fn]);
+  K.forEach(k=>F.forEach(f=>{
+    const b=$('c'+k+f), kk=key(k,f), hidden=st.mode==='prac'&&st.hidden.has(kk)&&!st.solved.has(kk);
+    let c='cell';
+    if(hidden){ c+=' hid'; if(st.sel===kk) c+=' sel'; b.innerHTML='?'; b.setAttribute('aria-label',f+' de '+k+' grados, por completar'); }
+    else{
+      b.innerHTML=fmt(val(k,f)); b.removeAttribute('aria-label');
+      if(st.mode==='prac'&&st.solved.has(kk)) c+=' solved';
+      else if(st.mode==='ver'&&(kk===L1||kk===L2)) c+=' link';
+      if(st.cur===kk) c+=' cur';
+    }
+    b.className=c;
+  }));
+}
+
+function explain(k,f){
+  const v=val(k,f), q=quad(k);
+  if(q===0){
+    const [x,y]=PT[k];
+    const form={sen:['y',y],cos:['x',x],tan:['y/x',y+'/'+x],cot:['x/y',x+'/'+y],sec:['1/x','1/'+x],csc:['1/y','1/'+y]}[f];
+    const den0=v===ND;
+    return '<p><b>'+f+' '+k+'°</b>: '+k+'° es un ángulo cuadrantal. Su punto en el círculo unitario es (x, y) = ('+x+', '+y+').</p>'+
+      '<p>'+f+' = '+form[0]+' = '+form[1]+(den0?': el denominador vale 0, así que <b>no está definida</b>.':' = <b>'+fmt(v)+'</b>')+'</p>';
+  }
+  const r=ref(k), pos=POS[q].includes(f);
+  if(q===1){
+    return '<p><b>'+f+' '+k+'°</b> = '+fmt(v)+'. Es un ángulo del triángulo: se lee directamente de sus lados.</p>'+
+      '<p>Cofunción: '+f+' '+k+'° = '+COF[f]+' '+(90-k)+'° (porque '+k+'° + '+(90-k)+'° = 90°).</p>';
+  }
+  const rx=q===2?'180° − '+k+'°':q===3?k+'° − 180°':'360° − '+k+'°';
+  return '<p><b>'+f+' '+k+'°</b>: '+k+'° está en el cuadrante '+ROM[q]+'. Ángulo de referencia: '+rx+' = '+r+'°.</p>'+
+    '<p>En el cuadrante '+ROM[q]+', '+f+' es '+(pos?'positiva':'negativa')+'. Por eso '+f+' '+k+'° = '+(pos?'':'−')+f+' '+r+'° = <b>'+fmt(v)+'</b>.</p>';
+}
+function setDetail(html,cls){ const d=$('detail'); d.className='detail'+(cls?' '+cls:''); d.innerHTML=html; }
+
+function clickCell(k,f){
+  const kk=key(k,f);
+  if(st.mode==='prac'&&st.hidden.has(kk)&&!st.solved.has(kk)){
+    st.sel=kk; renderTable(); updatePal();
+    setDetail('<p>Elige el valor de <b>'+f+' '+k+'°</b> en la paleta de arriba.</p>');
+    return;
+  }
+  st.cur=kk;
+  if(st.mode==='ver'&&(k===30||k===60)){ st.ang=k; st.fn=f; renderTri(); }
+  else renderTable();
+  setDetail(explain(k,f));
+}
+
+/* ---------- práctica ---------- */
+function buildChips(){
+  const c=$('chips');
+  PAL.forEach(p=>{const b=document.createElement('button');b.type='button';b.className='chip';b.innerHTML=fmt(p);
+    b.setAttribute('aria-label',p===ND?'no definida':p);b.onclick=()=>answer(p);c.appendChild(b);});
+}
+function updatePal(){
+  $('pal').hidden=st.mode!=='prac';
+  $('chips').querySelectorAll('.chip').forEach(b=>b.disabled=!st.sel);
+  const tot=st.hidden.size, done=st.solved.size;
+  $('score').textContent='Correctas: '+done+' de '+tot+' · intentos: '+st.tries;
+}
+function answer(p){
+  if(!st.sel) return;
+  const [ks,f]=st.sel.split('|'); const k=+ks; const c=val(k,f);
+  st.tries++;
+  if(p===c){
+    st.solved.add(st.sel); const kk=st.sel; st.sel=null; st.cur=kk;
+    renderTable(); updatePal();
+    if(st.solved.size===st.hidden.size){
+      setDetail('<span class="tag">Completo</span><p>Terminaste: '+st.hidden.size+' celdas en '+st.tries+' intentos.</p>','ok');
+    } else setDetail('<span class="tag">Correcto</span>'+explain(k,f),'ok');
+    return;
+  }
+  const abs=s=>s.replace('−',''); const q=quad(k);
+  let msg;
+  if(c===ND) msg='Esta razón no está definida en '+k+'°: su denominador vale 0.';
+  else if(p===ND) msg='Sí está definida: en '+k+'° el denominador no vale 0.';
+  else if(abs(p)===abs(c)) msg='El valor sin signo es correcto; revisa el signo. En '+(q===0?'este eje':'el cuadrante '+ROM[q])+', '+f+' es '+(c.startsWith('−')?'negativa':'positiva')+'.';
+  else if(q===0) msg='Pista: usa el punto (x, y) = ('+PT[k][0]+', '+PT[k][1]+') del círculo unitario.';
+  else msg='Pista: el ángulo de referencia es '+ref(k)+'°. Usa el triángulo 1 : √3 : 2 y después el signo del cuadrante.';
+  const b=$('c'+k+f); b.classList.remove('shake'); void b.offsetWidth; b.classList.add('shake');
+  updatePal();
+  setDetail('<span class="tag">Intenta de nuevo</span><p>'+msg+'</p>','bad');
+}
+function startPractice(n){
+  const all=[]; K.forEach(k=>F.forEach(f=>all.push(key(k,f))));
+  for(let i=all.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[all[i],all[j]]=[all[j],all[i]];}
+  st.mode='prac'; st.hidden=new Set(n?all.slice(0,n):all); st.solved=new Set(); st.sel=null; st.cur=null; st.tries=0;
+  setModeBtns(); renderTable(); updatePal();
+  setDetail('<p>Toca una celda con «?» y elige su valor. Recuerda: primero el ángulo de referencia, después el signo del cuadrante.</p>');
+}
+function setModeBtns(){
+  $('b-ver').classList.toggle('primary',st.mode==='ver');
+  $('b-p12').classList.toggle('primary',st.mode==='prac'&&st.hidden.size===12);
+  $('b-pall').classList.toggle('primary',st.mode==='prac'&&st.hidden.size>12);
+}
+$('b-ver').onclick=()=>{st.mode='ver';st.sel=null;st.cur=null;setModeBtns();renderTable();updatePal();setDetail(explain(st.ang,st.fn));};
+$('b-p12').onclick=()=>startPractice(12);
+$('b-pall').onclick=()=>startPractice(0);
+
+buildSeg(); buildTable(); buildChips(); renderTri(); updatePal();
+setDetail(explain(30,'sen'));
+})();
+</script>
+</body>
+</html>

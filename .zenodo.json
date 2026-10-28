@@ -1,0 +1,37 @@
+{
+  "title": "Cofunciones en el triángulo 30°-60°-90°: actividad interactiva sobre cofunciones y la tabla de razones trigonométricas de 0° a 360°",
+  "upload_type": "lesson",
+  "language": "spa",
+  "version": "1.0.0",
+  "license": "cc-by-nc-sa-4.0",
+  "access_right": "open",
+  "creators": [
+    {
+      "name": "Castillo Márquez, Dalia Imelda",
+      "orcid": "0000-0002-5890-0437",
+      "affiliation": "Universidad Autónoma de Nayarit, Unidad Académica de Ciencias Básicas e Ingenierías"
+    }
+  ],
+  "description": "<p>Actividad interactiva para estudiar las cofunciones a partir del triángulo 30°-60°-90°. El estudiante elige un ángulo (30° o 60°) y una razón trigonométrica; la figura resalta el lado del numerador y el del denominador, e indica si cada lado es opuesto, adyacente o hipotenusa. Al mirar desde el ángulo complementario se comprueba que la fracción es la misma y solo cambia el nombre de la razón, lo que justifica identidades como sen 30° = cos 60°.</p><p>Incluye la tabla de las seis razones trigonométricas de 0° a 360° en pasos de 30°, con la explicación de cada valor mediante el ángulo de referencia y el signo del cuadrante, una nota sobre los ángulos que no pertenecen al triángulo y un modo de práctica con retroalimentación inmediata.</p><p>Versión en línea: <a href=\"https://daliacastillo.github.io/cofunciones-30-60-90/\">https://daliacastillo.github.io/cofunciones-30-60-90/</a></p>",
+  "keywords": [
+    "trigonometría",
+    "cofunciones",
+    "triángulo 30-60-90",
+    "ángulos notables",
+    "razones trigonométricas",
+    "ángulo de referencia",
+    "signos por cuadrante",
+    "círculo unitario",
+    "material didáctico interactivo",
+    "recurso educativo abierto",
+    "enseñanza de las matemáticas",
+    "educación superior"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://daliacastillo.github.io/cofunciones-30-60-90/",
+      "relation": "isSupplementedBy",
+      "resource_type": "lesson"
+    }
+  ]
+}
